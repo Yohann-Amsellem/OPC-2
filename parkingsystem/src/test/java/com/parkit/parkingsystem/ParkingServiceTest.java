@@ -35,7 +35,7 @@ public class ParkingServiceTest {
     private static TicketDAO ticketDAO;
 
     @BeforeEach
-    private void setUpPerTest() {
+	public static void setUpPerTest() {
         try {
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
@@ -57,26 +57,11 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processExitingVehicleTest(){
+    public static void processExitingVehicleTest(){
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
 
     
-   
-  /*  public void processQueryFromDatabase() throws Exception {
-    	parkingService.processExitingVehicle();
-    	  String RegNumber = inputReaderUtil.readVehicleRegistrationNumber() ;
-    	  Boolean RecurentUser = false;
-          ResultSet résultats = null;
-          String requete = "SELECT * FROM ticket WHERE VEHICLE_REG_NUMBER = '\"RegNumber\"'\"";
-     //TODO : Peut etre créer une nouvelle variable Recurent User de type boolean et faire le test 
-          // If (recurrent user){ on applique la remise;} else { on paye le prix normal;}
-          	 Connection con = null;
-             Statement stmt = con.createStatement();
-             résultats = stmt.executeQuery(requete);
-             if(RecurentUser)
-          } 
-          */
     }
     
