@@ -83,14 +83,15 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingLotExit(){
-        testParkingACar();
+     //   testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processIncomingVehicle();  // process new vehicle = new ticket
         parkingService.processExitingVehicle();
         Ticket ticket =   ticketDAO.getTicket("ABCDEF");
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (80*60*1000));
+        inTime.setTime( System.currentTimeMillis() - (90*60*1000));
         Date outTime= new Date();
-        outTime.setTime( System.currentTimeMillis()+ (60*60*1000)) ;
+        outTime.setTime( System.currentTimeMillis()+ (70*60*1000)) ;
         assertNotNull(ticket.getOutTime());
         assertNotNull(ticket.getPrice());
         
@@ -118,9 +119,9 @@ public class ParkingDataBaseIT {
         parkingService.processExitingVehicle();
         Ticket ticket =   ticketDAO.getTicket("ABCDEF");
         Date inTime = new Date();
-        inTime.setTime(System.currentTimeMillis() - (80*60*1000));
+        inTime.setTime(System.currentTimeMillis() - (90*60*1000));
         Date outTime= new Date();
-        outTime.setTime(System.currentTimeMillis()+ (60*60*1000));
+        outTime.setTime(System.currentTimeMillis()+ (70*60*1000));
         assertNotNull(ticket.getOutTime());
         assertNotNull(ticket.getPrice());
         
@@ -134,7 +135,7 @@ public class ParkingDataBaseIT {
     	Date date = new Date();
         Calendar c = Calendar.getInstance(); 
         c.setTime(date); 
-        c.add(Calendar.HOUR, 2);
+        c.add(Calendar.HOUR, 1);
         date = c.getTime();
    when(parkingService.returnCurrentDate()).thenReturn(date);
     	
@@ -143,7 +144,7 @@ public class ParkingDataBaseIT {
          parkingService.processIncomingVehicle();
          parkingService.processExitingVehicle();
          Ticket ticket =   ticketDAO.getTicket("ABCDEF");
-        assertEquals( Calcul.calculCentieme(Fare.DISCOUNT_RATE * Fare.CAR_RATE_PER_HOUR),2* ticket.getPrice()); // on doit annuler la demi heure gratuite a cause de l'utilisation du calendrier en int juste pour le test 
+        assertEquals( Calcul.calculCentieme(Fare.DISCOUNT_RATE * Fare.CAR_RATE_PER_HOUR),(2)*ticket.getPrice()); // on doit annuler la demi heure gratuite a cause de l'utilisation du calendrier en int juste pour le test 
         }
         
     	
