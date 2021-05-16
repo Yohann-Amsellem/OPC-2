@@ -14,10 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Date;
 
 import static org.mockito.Mockito.*;
@@ -33,7 +29,8 @@ public class ParkingServiceTest {
     private static ParkingSpotDAO parkingSpotDAO;
     @Mock
     private static TicketDAO ticketDAO;
-
+    
+    
     @BeforeEach
 	public static void setUpPerTest() {
         try {
@@ -63,5 +60,10 @@ public class ParkingServiceTest {
     }
 
     
+    @Test
+    public static void processIncomingVehicleTest(){
+        parkingService.processIncomingVehicle();
+        verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+    }
     }
     

@@ -9,20 +9,27 @@ public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+    /**
+     * @return
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
+    public Connection getConnection() throws ClassNotFoundException, SQLException {
       /*  logger.info("Create DB connection");
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serv");
         */
-        
-        final String DB_URL = "jdbc:mysql://localhost:3306/prod";
+    	Class.forName("com.mysql.cj.jdbc.Driver");
+
+    //	final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+    	   final String DB_URL = "jdbc:mysql://localhost:3306/prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serv";
 
 
-        final String USER = "root";
-        final String PASS = "rootroot"; 
+    	   final String USER = "root";
+    	   final String PASS = "rootroot"; 
 
-       Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
-       
-       return conn;
+   //	  Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serv");
+    	  Connection conn2 = DriverManager.getConnection(DB_URL,USER,PASS);
+       return conn2;
     }
 
     public void closeConnection(Connection con){

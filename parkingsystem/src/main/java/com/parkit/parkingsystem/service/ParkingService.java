@@ -1,6 +1,5 @@
 package com.parkit.parkingsystem.service;
 
-import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -10,17 +9,14 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.Date;
 
 public class ParkingService {
 
 	private static final Logger logger = LogManager.getLogger("ParkingService");
 
-	private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
+	public static FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
 	private static InputReaderUtil inputReaderUtil;
 	private static ParkingSpotDAO parkingSpotDAO;
@@ -32,7 +28,7 @@ public class ParkingService {
 		ParkingService.ticketDAO = ticketDAO;
 	}
 
-	public static void processIncomingVehicle() {
+	public void processIncomingVehicle() {
 		try{
 			ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 			if(parkingSpot !=null && parkingSpot.getId() > 0){
@@ -102,12 +98,19 @@ public class ParkingService {
 		}
 	}
 
+	public Date returnCurrentDate() {
+		
+		return new Date();
+	}
+	
+	
 	public void processExitingVehicle() {
 		try{
 			String vehicleRegNumber = getVehichleRegNumber();
 			Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-			Date outTime = new Date();
-			ticket.setOutTime(outTime);
+		//	Date outTime= new Date();
+	  //     outTime.setTime(returnCurrentDate().getTime());
+			ticket.setOutTime(returnCurrentDate());
 			boolean discount = discountAvaibility(ticketDAO.countRegNumber(ticket));
 			fareCalculatorService.calculateFare(ticket, discount);
 			if(ticketDAO.updateTicket(ticket)) {
@@ -115,7 +118,7 @@ public class ParkingService {
 				parkingSpot.setAvailable(true);
 				parkingSpotDAO.updateParking(parkingSpot);
 				System.out.println("Please pay the parking fare:" + ticket.getPrice());
-				System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+				System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + ticket.getOutTime());
 			}else{
 				System.out.println("Unable to update ticket information. Error occurred");
 			}

@@ -18,12 +18,12 @@ public class TicketDAO {
 
 	private static final Logger logger = LogManager.getLogger("TicketDAO");
 
-	public static DataBaseConfig dataBaseConfig = new DataBaseConfig();
+	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
 	public boolean saveTicket(Ticket ticket){
 		Connection con = null;
 		try {
-			con = DataBaseConfig.getConnection();
+			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
 			//ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			//ps.setInt(1,ticket.getId());
@@ -40,12 +40,12 @@ public class TicketDAO {
 			return false;
 		}
 	}
-
+// débuguer le point d'arret ligne 48
 	public Ticket getTicket(String vehicleRegNumber) {
 		Connection con = null;
 		Ticket ticket = null;
 		try {
-			con = DataBaseConfig.getConnection();
+			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
 			//ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			ps.setString(1,vehicleRegNumber);
@@ -70,10 +70,10 @@ public class TicketDAO {
 		return ticket;
 	}
 
-	public static boolean updateTicket(Ticket ticket) {
+	public boolean updateTicket(Ticket ticket) {
 		Connection con = null;
 		try {
-			con = DataBaseConfig.getConnection();
+			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
 			ps.setDouble(1, ticket.getPrice());
 			ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
@@ -97,10 +97,10 @@ public class TicketDAO {
 			PreparedStatement ps = con.prepareStatement(DBConstants.GET_ALL_TICKET);
 			//ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()){
+			while(rs.next()){
 				ticket = new Ticket();
-				ticket.setId(rs.getInt(0));
-				ticket.setVehicleRegNumber(rs.getString(2));
+				ticket.setId(rs.getInt(1));
+				ticket.setVehicleRegNumber(rs.getString(3));
 				tickets.add(ticket);
 			}
 			dataBaseConfig.closeResultSet(rs);
@@ -115,12 +115,12 @@ public class TicketDAO {
 	public int countRegNumber(Ticket ticket) {
 		Connection con = null;
 		try {
-			con = DataBaseConfig.getConnection();
+			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_REG_NUMBER);
 			ps.setString(1,ticket.getVehicleRegNumber());
 			ResultSet rs = ps.executeQuery();
-			if(rs != null){
-				return rs.getInt(0);
+			if(rs.next()){
+				return rs.getInt(1);
 			}
 		}catch (Exception ex){
 			logger.error("Error saving ticket info",ex);

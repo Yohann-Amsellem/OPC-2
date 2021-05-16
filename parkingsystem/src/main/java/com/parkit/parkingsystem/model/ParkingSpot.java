@@ -4,7 +4,7 @@ import com.parkit.parkingsystem.constants.ParkingType;
 
 public class ParkingSpot {
     private int number;
-    private ParkingType parkingType;
+    private  ParkingType parkingType;
     private boolean isAvailable;
 
     public ParkingSpot(int number, ParkingType parkingType, boolean isAvailable) {
@@ -21,7 +21,7 @@ public class ParkingSpot {
         this.number = number;
     }
 
-    public ParkingType getParkingType() {
+    public  ParkingType getParkingType() {
         return parkingType;
     }
 
